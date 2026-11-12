@@ -1,0 +1,206 @@
+﻿@page
+@model PESCAPP.Pages.Administracion.IndexModel
+
+@{
+    ViewData["Title"] = "Administración PESCAPP";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administración - PESCAPP</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f5f7;
+            color: #173b50;
+        }
+
+        header {
+            background: #092c3e;
+            color: white;
+            padding: 25px 7%;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .contenedor {
+            max-width: 1150px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.06);
+            overflow-x: auto;
+        }
+
+        h2 {
+            color: #075b78;
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #e1e8ec;
+        }
+
+        th {
+            background: #e8f3f5;
+        }
+
+        button {
+            padding: 9px 13px;
+            background: #087b9e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .estado {
+            font-weight: bold;
+        }
+
+        .volver {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #087b9e;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>PESCAPP | Administración</h1>
+        <p>Gestión de usuarios y productos registrados</p>
+    </header>
+
+    <main class="contenedor">
+
+        <a href="/" class="volver">← Volver al inicio</a>
+
+        <section class="panel">
+            <h2>Usuarios registrados</h2>
+
+            <p>Total de usuarios: <strong>@Model.Usuarios.Count</strong></p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo electrónico</th>
+                        <th>Teléfono</th>
+                        <th>Tipo de usuario</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var usuario in Model.Usuarios)
+                    {
+                        <tr>
+                            <td>@usuario.FullName</td>
+                            <td>@usuario.Email</td>
+                            <td>@usuario.PhoneNumber</td>
+                            <td>@usuario.UserType</td>
+                            <td>
+                                @if (usuario.UserType == "Comprador")
+                                {
+                                    <form method="post" asp-page-handler="CambiarTipoUsuario">
+                                        <input type="hidden" name="id" value="@usuario.Id" />
+                                        <input type="hidden" name="nuevoTipo" value="Vendedor" />
+                                        <button type="submit">Convertir en vendedor</button>
+                                    </form>
+                                }
+                                else if (usuario.UserType == "Vendedor")
+                                {
+                                    <form method="post" asp-page-handler="CambiarTipoUsuario">
+                                        <input type="hidden" name="id" value="@usuario.Id" />
+                                        <input type="hidden" name="nuevoTipo" value="Comprador" />
+                                        <button type="submit">Convertir en comprador</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+
+        <section class="panel">
+            <h2>Productos registrados</h2>
+
+            <p>Total de productos: <strong>@Model.Productos.Count</strong></p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Vendedor</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Procedencia</th>
+                        <th>Observaciones</th>
+                        <th>Fecha de publicación</th>
+                        <th>Última actualización</th>
+                        <th>Disponibilidad</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var producto in Model.Productos)
+                    {
+                        <tr>
+                            <td>@producto.Nombre</td>
+                            <td>@producto.Categoria</td>
+                            <td>@(producto.Vendedor?.FullName ?? "No disponible")</td>
+                            <td>@producto.CantidadDisponible</td>
+                            <td>$@producto.Precio.ToString("N0")</td>
+                            <td>@producto.Procedencia</td>
+                            <td>@(string.IsNullOrWhiteSpace(producto.Observaciones) ? "Sin observaciones" : producto.Observaciones)</td>
+                            <td>@producto.FechaPublicacion.ToString("dd/MM/yyyy")</td>
+                            <td>@producto.FechaActualizacion.ToString("dd/MM/yyyy HH:mm")</td>
+
+                            <td class="estado">
+                                @(producto.Disponible ? "Disponible" : "No disponible")
+                            </td>
+
+                            <td>
+                                <form method="post" asp-page-handler="CambiarDisponibilidad">
+                                    <input type="hidden" name="id" value="@producto.Id" />
+                                    <button type="submit">
+                                        @(producto.Disponible ? "Desactivar" : "Activar")
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+</body>
+</html>

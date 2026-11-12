@@ -1,0 +1,181 @@
+﻿@page
+@model RegisterModel
+
+@{
+    ViewData["Title"] = "Crear cuenta";
+}
+
+<style>
+    .registro-pescapp {
+        max-width: 650px;
+        margin: 25px auto;
+        padding: 35px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(13, 64, 83, 0.10);
+        border: 1px solid #dcebf0;
+    }
+
+    .registro-titulo {
+        text-align: center;
+        color: #07516b;
+        margin-bottom: 10px;
+        font-weight: 800;
+    }
+
+    .registro-descripcion {
+        text-align: center;
+        color: #718995;
+        margin-bottom: 28px;
+    }
+
+    .registro-pescapp label {
+        color: #16475e;
+        font-weight: 600;
+    }
+
+    .registro-pescapp .form-control,
+    .registro-pescapp .form-select {
+        border-radius: 9px;
+        border: 1px solid #cbdde5;
+    }
+
+    .registro-pescapp .form-control:focus,
+    .registro-pescapp .form-select:focus {
+        border-color: #07899b;
+        box-shadow: 0 0 0 3px rgba(7, 137, 155, 0.12);
+    }
+
+    .boton-registro {
+        background: #087e91;
+        color: white;
+        border: none;
+        border-radius: 9px;
+        padding: 13px;
+        font-weight: 700;
+        width: 100%;
+        margin-top: 12px;
+    }
+
+    .boton-registro:hover {
+        background: #065f73;
+        color: white;
+    }
+
+    .registro-nota {
+        background: #eaf5f7;
+        color: #24536a;
+        padding: 13px;
+        border-radius: 9px;
+        font-size: 13px;
+        margin-bottom: 22px;
+    }
+</style>
+
+<div class="registro-pescapp">
+
+    <h1 class="registro-titulo">Únete a PESCAPP</h1>
+
+    <p class="registro-descripcion">
+        Crea tu cuenta y conecta con nuevas oportunidades
+        en la pesca artesanal.
+    </p>
+
+    <div class="registro-nota">
+        Selecciona tu tipo de usuario para comenzar a utilizar
+        los servicios de PESCAPP.
+    </div>
+
+    <form id="registerForm"
+          asp-route-returnUrl="@Model.ReturnUrl"
+          method="post">
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger"
+             role="alert"></div>
+
+        <div class="mb-3">
+            <label asp-for="Input.FullName" class="form-label">
+                Nombre completo
+            </label>
+            <input asp-for="Input.FullName"
+                   class="form-control"
+                   placeholder="Ingresa tu nombre completo" />
+            <span asp-validation-for="Input.FullName"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.PhoneNumber" class="form-label">
+                Número de teléfono
+            </label>
+            <input asp-for="Input.PhoneNumber"
+                   class="form-control"
+                   placeholder="Ingresa tu teléfono" />
+            <span asp-validation-for="Input.PhoneNumber"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.UserType" class="form-label">
+                Tipo de usuario
+            </label>
+            <select asp-for="Input.UserType" class="form-select">
+                <option value="">Seleccione su tipo de usuario</option>
+                <option value="Comprador">Comprador</option>
+                <option value="Vendedor">Vendedor</option>
+            </select>
+            <span asp-validation-for="Input.UserType"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.Email" class="form-label">
+                Correo electrónico
+            </label>
+            <input asp-for="Input.Email"
+                   class="form-control"
+                   autocomplete="username"
+                   placeholder="nombre@correo.com" />
+            <span asp-validation-for="Input.Email"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.Password" class="form-label">
+                Contraseña
+            </label>
+            <input asp-for="Input.Password"
+                   class="form-control"
+                   autocomplete="new-password"
+                   placeholder="Crea una contraseña" />
+            <span asp-validation-for="Input.Password"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.ConfirmPassword" class="form-label">
+                Confirmar contraseña
+            </label>
+            <input asp-for="Input.ConfirmPassword"
+                   class="form-control"
+                   autocomplete="new-password"
+                   placeholder="Confirma tu contraseña" />
+            <span asp-validation-for="Input.ConfirmPassword"
+                  class="text-danger"></span>
+        </div>
+
+        <button id="registerSubmit"
+                type="submit"
+                class="boton-registro">
+            Crear mi cuenta
+        </button>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

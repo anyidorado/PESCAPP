@@ -1,0 +1,118 @@
+﻿@page
+@model PESCAPP.Pages.PerfilModel
+
+@{
+    ViewData["Title"] = "Mi perfil";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi perfil - PESCAPP</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f7fa;
+            color: #173b50;
+        }
+
+        header {
+            background: #075b78;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .contenedor {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            margin-top: 7px;
+            box-sizing: border-box;
+            border: 1px solid #cbd8df;
+            border-radius: 6px;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 12px 20px;
+            background: #087b9e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .mensaje {
+            color: #187a43;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #b42318;
+        }
+
+        .volver {
+            display: inline-block;
+            margin-top: 20px;
+            color: #087b9e;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>PESCAPP</h1>
+        <p>Mi perfil de usuario</p>
+    </header>
+
+    <main class="contenedor">
+        <h2>Información personal</h2>
+
+        @if (TempData["MensajePerfil"] != null)
+        {
+            <p class="mensaje">@TempData["MensajePerfil"]</p>
+        }
+
+        <div asp-validation-summary="All" class="error"></div>
+
+        <form method="post">
+            <label>Nombre completo</label>
+            <input asp-for="Input.FullName" />
+            <span asp-validation-for="Input.FullName" class="error"></span>
+
+            <label>Correo electrónico</label>
+            <input value="@Model.Correo" readonly />
+
+            <label>Número de teléfono</label>
+            <input asp-for="Input.PhoneNumber" />
+            <span asp-validation-for="Input.PhoneNumber" class="error"></span>
+
+            <label>Tipo de usuario</label>
+            <input value="@Model.TipoUsuario" readonly />
+
+            <button type="submit">Guardar cambios</button>
+        </form>
+
+        <a href="/" class="volver">Volver al inicio</a>
+    </main>
+</body>
+</html>

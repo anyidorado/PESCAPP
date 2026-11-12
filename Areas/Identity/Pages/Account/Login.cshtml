@@ -1,0 +1,188 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<style>
+    .login-pescapp {
+        max-width: 550px;
+        margin: 35px auto;
+        padding: 38px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(13, 64, 83, 0.10);
+        border: 1px solid #dcebf0;
+    }
+
+    .login-titulo {
+        text-align: center;
+        color: #07516b;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .login-descripcion {
+        text-align: center;
+        color: #718995;
+        margin-bottom: 28px;
+    }
+
+    .login-pescapp label {
+        color: #16475e;
+        font-weight: 600;
+    }
+
+    .login-pescapp .form-control {
+        border-radius: 9px;
+        border: 1px solid #cbdde5;
+    }
+
+        .login-pescapp .form-control:focus {
+            border-color: #07899b;
+            box-shadow: 0 0 0 3px rgba(7, 137, 155, 0.12);
+        }
+
+    .boton-login {
+        background: #087e91;
+        color: white;
+        border: none;
+        border-radius: 9px;
+        padding: 13px;
+        font-weight: 700;
+        width: 100%;
+        margin-top: 12px;
+    }
+
+        .boton-login:hover {
+            background: #065f73;
+            color: white;
+        }
+
+    .enlaces-login {
+        text-align: center;
+        margin-top: 25px;
+        line-height: 2.2;
+    }
+
+        .enlaces-login a {
+            color: #087e91;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+            .enlaces-login a:hover {
+                text-decoration: underline;
+            }
+
+    .login-nota {
+        background: #eaf5f7;
+        color: #24536a;
+        padding: 13px;
+        border-radius: 9px;
+        font-size: 13px;
+        margin-bottom: 22px;
+        text-align: center;
+    }
+</style>
+
+<div class="login-pescapp">
+
+    <h1 class="login-titulo">Bienvenido a PESCAPP</h1>
+
+    <p class="login-descripcion">
+        Ingresa a tu cuenta y continúa conectado
+        con la pesca artesanal.
+    </p>
+
+    <div class="login-nota">
+        Accede con tu correo electrónico y contraseña registrados.
+    </div>
+
+    <form id="account" method="post">
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger"
+             role="alert"></div>
+
+        <div class="mb-3">
+            <label asp-for="Input.Email" class="form-label">
+                Correo electrónico
+            </label>
+
+            <input asp-for="Input.Email"
+                   class="form-control"
+                   autocomplete="username"
+                   aria-required="true"
+                   placeholder="nombre@correo.com" />
+
+            <span asp-validation-for="Input.Email"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.Password" class="form-label">
+                Contraseña
+            </label>
+
+            <input asp-for="Input.Password"
+                   class="form-control"
+                   autocomplete="current-password"
+                   aria-required="true"
+                   placeholder="Ingresa tu contraseña" />
+
+            <span asp-validation-for="Input.Password"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input"
+                   asp-for="Input.RememberMe" />
+
+            <label class="form-check-label"
+                   asp-for="Input.RememberMe">
+                Recordar mi sesión
+            </label>
+        </div>
+
+        <button id="login-submit"
+                type="submit"
+                class="boton-login">
+            Iniciar sesión
+        </button>
+
+        <div class="enlaces-login">
+
+            <p>
+                <a id="forgot-password"
+                   asp-page="./ForgotPassword">
+                    ¿Olvidaste tu contraseña?
+                </a>
+            </p>
+
+            <p>
+                ¿Todavía no tienes cuenta?
+                <a asp-page="./Register"
+                   asp-route-returnUrl="@Model.ReturnUrl">
+                    Regístrate aquí
+                </a>
+            </p>
+
+            <p>
+                <a id="resend-confirmation"
+                   asp-page="./ResendEmailConfirmation">
+                    Reenviar confirmación de correo
+                </a>
+            </p>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+}

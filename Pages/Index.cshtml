@@ -1,5 +1,6 @@
 ﻿@page
 @model IndexModel
+@inject Microsoft.AspNetCore.Identity.UserManager<PESCAPP.Models.ApplicationUser> UserManager
 @{
     Layout = null;
     ViewData["Title"] = "PESCAPP";
@@ -82,7 +83,10 @@
             padding: 75px 8%;
             display: flex;
             align-items: center;
-            background: linear-gradient(115deg, #092c3e, #126477);
+            background-image: linear-gradient(rgba(3, 39, 57, 0.55), rgba(3, 39, 57, 0.65)), url('/images/pescapp-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             color: white;
         }
 
@@ -175,33 +179,49 @@
 
         .catalog {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 23px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 28px;
+            align-items: stretch;
         }
 
         .product-card {
             background: white;
-            border-radius: 14px;
+            border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,.06);
-            transition: .2s;
+            box-shadow: 0 6px 22px rgba(0, 45, 65, 0.10);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e5eff2;
+            height: 100%;
         }
+
+            .product-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 12px 28px rgba(0, 45, 65, 0.16);
+            }
 
         .product-card:hover {
             transform: translateY(-5px);
         }
 
         .product-image {
-            height: 170px;
+            height: 190px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 75px;
-            background: linear-gradient(135deg, #d7f0ec, #b7dedc);
+            font-size: 82px;
+            background: linear-gradient(135deg, #e5f5f3, #c5e5e2);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.03);
         }
 
         .product-info {
-            padding: 22px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .product-info small {
@@ -209,17 +229,45 @@
             font-weight: 700;
         }
 
-        .product-info h3 {
-            color: var(--azul);
-            margin: 10px 0;
-            font-size: 20px;
+            .product-info h3 {
+                color: var(--azul);
+                margin: 5px 0;
+                font-size: 21px;
+                font-weight: 700;
+                line-height: 1.4;
+            }
+
+            .product-info p {
+                color: #687984;
+                line-height: 1.7;
+                font-size: 14px;
+                margin: 4px 0;
+            }
+
+        .product-price {
+            color: #087f8c;
+            font-size: 22px;
+            font-weight: 800;
+            margin-top: 8px;
         }
 
-        .product-info p {
-            color: #687984;
-            line-height: 1.5;
-            font-size: 14px;
+        .product-quantity {
+            color: #087f8c;
+            font-weight: 700;
+            font-size: 16px;
         }
+
+        .product-category {
+            display: inline-block;
+            background: #e0f3f1;
+            color: #087f8c;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            width: fit-content;
+        }
+
 
         .demo-label {
             display: inline-block;
@@ -324,8 +372,46 @@
 
             .search-box input {
                 width: 100%;
-            }
+
+            } 
+            
         }
+
+        .decoracion-marina {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 25px;
+    font-size: 42px;
+    animation: aparecer 1s ease-in-out;
+}
+
+.decoracion-marina span:nth-child(even) {
+    font-size: 52px;
+}
+
+.mensaje-bienvenida {
+    color: #e4f5f7;
+    font-size: 17px;
+    line-height: 1.7;
+    max-width: 650px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+        @@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
     </style>
 </head>
 
@@ -336,9 +422,41 @@
 
         <nav>
             <a href="#inicio">Inicio</a>
-            <a href="#productos">Productos</a>
+            <a href="/Producto/Listado">Productos</a>
             <a href="#nosotros">Sobre el proyecto</a>
             <a href="#contacto">Contacto</a>
+
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                var currentUser = await UserManager.GetUserAsync(User);
+
+                @if (currentUser != null && currentUser.UserType == "Administrador")
+                {
+                    <a href="/Administracion">Administración</a>
+                }
+                @if (currentUser != null && currentUser.UserType == "Vendedor")
+                {
+                    <a href="/Producto/Crear">Publicar producto</a>
+                    <a href="/Producto/Listado">Mis productos</a>
+                }
+
+                <span>
+                    Hola, @(currentUser != null && !string.IsNullOrEmpty(currentUser.FullName)
+                  ? currentUser.FullName
+                  : User.Identity.Name)
+                </span>
+                <a href="/Perfil">Mi perfil</a>
+
+                <form asp-area="Identity" asp-page="/Account/Logout"
+                      asp-route-returnUrl="/" method="post">
+                    <button type="submit">Cerrar sesión</button>
+                </form>
+            }
+            else
+            {
+                <a href="/Identity/Account/Register">Registrarse</a>
+                <a href="/Identity/Account/Login">Iniciar sesión</a>
+            }
         </nav>
     </header>
 
@@ -347,17 +465,11 @@
             <div class="hero-content">
                 <div class="tag">Mosquera · Nariño · Colombia</div>
 
+
                 <h1>
                     Conectando la pesca artesanal con
                     <span>nuevas oportunidades.</span>
                 </h1>
-
-                <p>
-                    PESCAPP es una propuesta de plataforma web que busca
-                    facilitar la consulta y comercialización de productos
-                    pesqueros, conectando a vendedores y compradores mediante
-                    información organizada y accesible.
-                </p>
 
                 <a href="#productos" class="btn">Explorar productos</a>
             </div>
@@ -378,44 +490,81 @@
             </div>
 
             <div class="catalog">
-                <article class="product-card" data-search="pescado fresco pescado">
-                    <div class="product-image">🐟</div>
-                    <div class="product-info">
-                        <small>PRODUCTO DE EJEMPLO</small>
-                        <h3>Pescado fresco</h3>
-                        <p>
-                            Espacio para consultar las características,
-                            cantidad disponible, precio y procedencia básica.
-                        </p>
-                        <span class="demo-label">Contenido de demostración</span>
-                    </div>
-                </article>
+                @if (Model.Productos.Any())
+                {
+                    @foreach (var producto in Model.Productos)
+                    {
+                        <article class="product-card"
+                                 data-search="@($"{producto.Nombre} {producto.Categoria} {producto.Descripcion}")">
+                            <div class="product-image">
+                                @if (producto.Nombre.Contains("camarón", StringComparison.OrdinalIgnoreCase) ||
+                               producto.Nombre.Contains("camaron", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span>🦐</span>
+                                }
+                                else if (producto.Nombre.Contains("pargo", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span>🐠</span>
+                                }
+                                else if (producto.Nombre.Contains("cangrejo", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span>🦀</span>
+                                }
+                                else if (producto.Nombre.Contains("pulpo", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span>🐙</span>
+                                }
+                                else
+                                {
+                                    <span>🐟</span>
+                                }
+                            </div>
 
-                <article class="product-card" data-search="camarón mariscos">
-                    <div class="product-image">🦐</div>
-                    <div class="product-info">
-                        <small>PRODUCTO DE EJEMPLO</small>
-                        <h3>Camarón</h3>
-                        <p>
-                            Información del producto y datos de contacto
-                            del vendedor cuando se registre una publicación.
-                        </p>
-                        <span class="demo-label">Contenido de demostración</span>
-                    </div>
-                </article>
+                            <div class="product-info">
+                                <span class="product-category">@producto.Categoria</span>
 
-                <article class="product-card" data-search="producto temporada pesquero">
-                    <div class="product-image">🦪</div>
-                    <div class="product-info">
-                        <small>PRODUCTO DE EJEMPLO</small>
-                        <h3>Producto de temporada</h3>
-                        <p>
-                            Espacio para mostrar disponibilidad, precio
-                            y características básicas del producto.
-                        </p>
-                        <span class="demo-label">Contenido de demostración</span>
-                    </div>
-                </article>
+                                <h3>@producto.Nombre</h3>
+
+                                <p>@producto.Descripcion</p>
+
+                                <p>
+                                    <strong>Cantidad disponible:</strong>
+                                    <span class="product-quantity">
+                                        @producto.CantidadDisponible.ToString("0.##")
+                                    </span>
+                                </p>
+
+                                <p>
+                                    <strong>Precio:</strong>
+                                    <span class="product-price">
+                                        $@producto.Precio.ToString("N0")
+                                    </span>
+                                </p>
+
+                                <p>
+                                    <strong>Procedencia:</strong>
+                                    @producto.Procedencia
+                                </p>
+
+                                <p>
+                                    <strong>Vendedor:</strong>
+                                    @(producto.Vendedor?.FullName ?? "No disponible")
+                                </p>
+
+                                <p>
+                                    <strong>Contacto:</strong>
+                                    @(producto.Vendedor?.PhoneNumber ?? "No disponible")
+                                </p>
+
+                                <span class="demo-label">Producto publicado</span>
+                            </div>
+                        </article>
+                    }
+                }
+                else
+                {
+                    <p>No hay productos disponibles en este momento.</p>
+                }
             </div>
 
             <p id="noResults">No se encontraron productos con esa búsqueda.</p>

@@ -1,44 +1,161 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - PESCAPP</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PESCAPP.styles.css" asp-append-version="true" />
+
+    <style>
+        body {
+            margin: 0;
+            background: #f0f7fa;
+            color: #183b50;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        .barra-pescapp {
+            background: linear-gradient(120deg, #073b55, #087e91);
+            padding: 13px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.10);
+        }
+
+        .marca-pescapp {
+            color: white !important;
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .enlace-menu {
+            color: white !important;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+            .enlace-menu:hover {
+                background: rgba(255, 255, 255, 0.15);
+                color: white !important;
+            }
+
+        .contenido-pescapp {
+            min-height: 75vh;
+            padding-top: 35px;
+            padding-bottom: 45px;
+        }
+
+        .pie-pescapp {
+            background: #073b55;
+            color: #dcebf0;
+            padding: 25px 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+            .pie-pescapp a {
+                color: #a9e3e8;
+                text-decoration: none;
+            }
+
+                .pie-pescapp a:hover {
+                    text-decoration: underline;
+                }
+
+        .encabezado-pescapp {
+            min-height: 230px;
+            background-image: linear-gradient(rgba(3, 39, 57, 0.48), rgba(3, 39, 57, 0.65)), url('/images/pescapp-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: flex-start;
+        }
+
+            .encabezado-pescapp nav {
+                width: 100%;
+                padding: 25px 0;
+            }
+
+        .marca-pescapp {
+            color: white !important;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+            .marca-pescapp small {
+                font-size: 12px;
+                font-weight: 400;
+                letter-spacing: 0;
+                margin-top: 4px;
+            }
+
+        .enlace-menu {
+            color: white !important;
+            font-weight: 600;
+            padding: 10px 16px !important;
+            border-radius: 8px;
+        }
+
+            .enlace-menu:hover {
+                background: rgba(255, 255, 255, 0.20);
+            }
+    </style>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+
+    <header class="encabezado-pescapp">
+        <nav class="navbar navbar-expand-sm">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">PESCAPP</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="marca-pescapp" asp-page="/Index">
+                    PESCAPP
+                    <small>Conectando la pesca artesanal</small>
+                </a>
+
+                <button class="navbar-toggler bg-light" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#menuPescapp">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="collapse navbar-collapse" id="menuPescapp">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link enlace-menu" asp-page="/Index">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link enlace-menu" asp-page="/Privacy">Privacidad</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <div class="container contenido-pescapp">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="pie-pescapp">
         <div class="container">
-            &copy; 2026 - PESCAPP - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            <strong>PESCAPP</strong>
+            <p class="mb-1">
+                Conectando la pesca artesanal con nuevas oportunidades.
+            </p>
+            <span>© 2026 PESCAPP | Todos los derechos reservados</span>
         </div>
     </footer>
 
@@ -47,5 +164,6 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

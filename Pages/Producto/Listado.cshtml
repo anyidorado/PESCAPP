@@ -1,0 +1,295 @@
+﻿@page
+@model PESCAPP.Pages.Producto.ListadoModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Productos disponibles";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Productos disponibles - PESCAPP</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f7f8;
+            color: #183b46;
+        }
+
+        header {
+            background: #063b50;
+            color: white;
+            padding: 22px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 27px;
+        }
+
+        header span {
+            color: #8ce0d0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        .contenedor {
+            max-width: 1150px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .introduccion {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .introduccion h1 {
+            color: #07516a;
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        .introduccion p {
+            color: #607b83;
+            font-size: 16px;
+        }
+
+        .productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .tarjeta {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 55, 70, 0.09);
+            border: 1px solid #dcebed;
+        }
+
+        .icono {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .tarjeta h3 {
+            color: #07516a;
+            margin: 5px 0 12px;
+            font-size: 23px;
+        }
+
+        .categoria {
+            display: inline-block;
+            background: #dff5ef;
+            color: #08745f;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .descripcion {
+            color: #627980;
+            line-height: 1.5;
+            margin: 15px 0;
+        }
+
+        .precio {
+            color: #08745f;
+            font-size: 25px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .detalle {
+            border-top: 1px solid #e5eeee;
+            padding-top: 12px;
+            margin-top: 12px;
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .contacto {
+            background: #eaf6f7;
+            padding: 13px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .volver {
+            display: inline-block;
+            background: #087e83;
+            color: white;
+            padding: 13px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 35px;
+            font-weight: bold;
+        }
+
+        .volver:hover {
+            background: #05636a;
+        }
+
+        .vacio {
+            background: white;
+            padding: 35px;
+            text-align: center;
+            border-radius: 14px;
+        }
+
+        footer {
+            background: #063b50;
+            color: white;
+            text-align: center;
+            padding: 22px;
+            margin-top: 55px;
+        }
+
+        @@media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            nav a {
+                margin-left: 0;
+                margin-right: 12px;
+            }
+
+            .introduccion h1 {
+                font-size: 27px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h2>PES<span>CAPP</span></h2>
+
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="/Producto/Listado">Productos</a>
+            <a href="/#nosotros">Sobre el proyecto</a>
+            <a href="/#contacto">Contacto</a>
+        </nav>
+    </header>
+
+    <main class="contenedor">
+
+        <section class="introduccion">
+            <h1>Productos pesqueros disponibles</h1>
+            <p>Consulta los productos publicados por los vendedores de PESCAPP.</p>
+        </section>
+
+        @if (Model.Productos.Any())
+        {
+            <div class="productos">
+                @foreach (var producto in Model.Productos)
+                {
+                    <article class="tarjeta">
+                        <div class="icono">
+                            @if (producto.Nombre.Contains("camarón", StringComparison.OrdinalIgnoreCase) ||
+                           producto.Nombre.Contains("camaron", StringComparison.OrdinalIgnoreCase))
+                            {
+                                <span>🦐</span>
+                            }
+                            else if (producto.Nombre.Contains("pargo", StringComparison.OrdinalIgnoreCase))
+                            {
+                                <span>🐠</span>
+                            }
+                            else if (producto.Nombre.Contains("cangrejo", StringComparison.OrdinalIgnoreCase))
+                            {
+                                <span>🦀</span>
+                            }
+                            else if (producto.Nombre.Contains("pulpo", StringComparison.OrdinalIgnoreCase))
+                            {
+                                <span>🐙</span>
+                            }
+                            else
+                            {
+                                <span>🐟</span>
+                            }
+                        </div>
+
+                        <h3>@producto.Nombre</h3>
+
+                        <span class="categoria">@producto.Categoria</span>
+
+                        <p class="descripcion">
+                            @producto.Descripcion
+                        </p>
+
+                        <div class="precio">
+                            $@producto.Precio.ToString("N0")
+                        </div>
+
+                        <div class="detalle">
+                            <div><strong>Cantidad disponible:</strong> @producto.CantidadDisponible.ToString("0.##")</div>
+                            <div><strong>Procedencia:</strong> @producto.Procedencia</div>
+                            <div><strong>Observaciones:</strong> @(string.IsNullOrWhiteSpace(producto.Observaciones) ? "Sin observaciones" : producto.Observaciones)</div>
+                            <div><strong>Publicado:</strong> @producto.FechaPublicacion.ToString("dd/MM/yyyy")</div>
+                            <div><strong>Última actualización:</strong> @producto.FechaActualizacion.ToString("dd/MM/yyyy HH:mm")</div>
+                        </div>
+
+                        <div class="contacto">
+                            <strong>Vendedor:</strong> @(producto.Vendedor?.FullName ?? "No disponible")
+                            <br />
+                            <strong>Contacto:</strong> @(producto.Vendedor?.PhoneNumber ?? "No disponible")
+                        </div>
+                        @if (Model.EsVendedor && Model.UsuarioId == producto.VendedorId)
+                        {
+                            <form method="post" asp-page-handler="CambiarDisponibilidad">
+                                <input type="hidden" name="id" value="@producto.Id" />
+
+                                <button type="submit">
+                                    @(producto.Disponible ? "Marcar como no disponible" : "Marcar como disponible")
+                                </button>
+                            </form>
+                        }
+                    </article>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="vacio">
+                <h3>Aún no hay productos registrados</h3>
+                <p>Cuando los vendedores publiquen sus productos, aparecerán aquí.</p>
+            </div>
+        }
+
+        <a href="/" class="volver">Volver al inicio</a>
+
+    </main>
+
+    <footer>
+        <p>PESCAPP | Plataforma de apoyo a la comercialización pesquera artesanal</p>
+        <p>Mosquera, Nariño | Proyecto académico 2026</p>
+    </footer>
+
+</body>
+</html>
