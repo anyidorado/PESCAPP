@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PESCAPP.Data;
 using PESCAPP.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PESCAPP.Pages.Producto
 {
+    [Authorize]
     public class ListadoModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -26,24 +28,25 @@ namespace PESCAPP.Pages.Producto
 
         public bool EsVendedor { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             var usuario = await _userManager.GetUserAsync(User);
 
-            UsuarioId = usuario?.Id;
-            EsVendedor = usuario?.UserType == "Vendedor";
-
-            if (usuario == null)
+            if (usuario == null || usuario.UserType != "Vendedor")
             {
-                Productos = new List<PESCAPP.Models.Producto>();
-                return;
+                return Forbid();
             }
+
+            UsuarioId = usuario.Id;
+            EsVendedor = true;
 
             Productos = await _context.Productos
                 .Where(p => p.VendedorId == usuario.Id)
                 .Include(p => p.Vendedor)
                 .OrderByDescending(p => p.FechaPublicacion)
                 .ToListAsync();
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostCambiarDisponibilidadAsync(int id)

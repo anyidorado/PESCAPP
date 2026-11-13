@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using PESCAPP.Data;
 using PESCAPP.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization; 
 
 namespace PESCAPP.Pages.Producto
 {
+    
+    [Authorize]
     public class CrearModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -22,8 +25,16 @@ namespace PESCAPP.Pages.Producto
         [BindProperty]
         public PESCAPP.Models.Producto Producto { get; set; } = new PESCAPP.Models.Producto();
 
-        public void OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
+            var usuario = await _userManager.GetUserAsync(User);
+
+            if (usuario == null || usuario.UserType != "Vendedor")
+            {
+                return Forbid();
+            }
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
